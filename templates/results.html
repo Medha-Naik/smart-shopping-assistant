@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">PricePulse</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Wishlist</a></li>
+            <li><a href="#">Login</a></li>
+            <li><a href="#" class="btn">Sign Up</a></li>
+        </ul>
+    </nav>
+    <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for iPhone 15, MacBook, Sony TV...">
+            <button id="search-btn">Search</button>
+    </div>
+    <div id="results"></div>
+    <script src="{{url_for('static',filename='search.js')}}"></script>
+</body>
+</html>

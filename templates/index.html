@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PricePulse - Track. Compare. Save.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">PricePulse</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Wishlist</a></li>
+            <li><a href="#">Login</a></li>
+            <li><a href="#" class="btn">Sign Up</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Never Overpay for Electronics Again</h1>
+        <p>Compare prices across multiple stores, set target alerts, and track price history in real time.</p>
+
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search for iPhone 15, MacBook, Sony TV...">
+            <button id="search-btn">Search</button>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <h2>Why Use PricePulse?</h2>
+        <div class="feature-container">
+            <div class="feature-card">
+                <h3>Compare Prices</h3>
+                <p>Instantly compare prices across Amazon, Flipkart, Croma and more.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Set Target Alerts</h3>
+                <p>Get notified the moment your dream price is reached.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Track Price History</h3>
+                <p>View detailed price graphs and historical lows before buying.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <span>1</span>
+                <p>Search for your product</p>
+            </div>
+            <div class="step">
+                <span>2</span>
+                <p>Add to wishlist & set target price</p>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <p>Get notified when price drops</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Start Saving Today</h2>
+        <button class="cta-btn">Create Free Account</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 PricePulse. All rights reserved.</p>
+    </footer>
+<script>
+    document.querySelector('#search-btn').addEventListener('click',function(){
+        const query=document.querySelector('#search-input').value
+        if(!query)return
+        window.location.href=`/results.html?q=${query}`
+    })
+
+    document.querySelector('#search-input').addEventListener('keypress',function(e)
+    {
+        if(e.key==='Enter'){
+            document.querySelector('#search-btn').click()
+        }
+    })
+</script>
+</body>
+</html>

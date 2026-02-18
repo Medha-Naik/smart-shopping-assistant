@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #f9f9f9;
+    color: #111111;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 80px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #111111;
+    font-weight: 500;
+}
+
+.btn {
+    padding: 8px 18px;
+    border: 1px solid #111111;
+    border-radius: 6px;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: #111111;
+    color: white;
+}
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #6b7280;
+    margin-bottom: 35px;
+}
+
+/* Search */
+.search-box {
+    display: flex;
+    justify-content: center;
+}
+
+.search-box input {
+    padding: 14px;
+    width: 380px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px 0 0 6px;
+    outline: none;
+}
+
+.search-box button {
+    padding: 14px 24px;
+    border: 1px solid #111111;
+    background: #111111;
+    color: white;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-box button:hover {
+    background: #333333;
+}
+
+/* Features */
+.features {
+    padding: 100px 20px;
+    text-align: center;
+    background: white;
+}
+
+.feature-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.feature-card {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    width: 270px;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+/* How Section */
+.how {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 50px;
+}
+
+.step span {
+    font-size: 32px;
+    font-weight: 600;
+    color: #111111;
+}
+
+/* CTA */
+.cta {
+    text-align: center;
+    padding: 100px 20px;
+    background: #111111;
+    color: white;
+}
+
+.cta-btn {
+    padding: 14px 30px;
+    margin-top: 25px;
+    background: white;
+    color: #111111;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cta-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 14px;
+}
