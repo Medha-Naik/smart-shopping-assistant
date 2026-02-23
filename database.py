@@ -1,14 +1,17 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 DB_CONFIG={
-    'dbname':'pricepulse',
-    'user':'postgres',
-    'password':'Tzenz@23',
-    'host':'localhost',
-    'port': 5432
+    "dbname":os.getenv("DB_NAME"),
+    "user":os.getenv("DB_USER"),
+    "password":os.getenv("DB_PASSWORD"),
+    "host":os.getenv("DB_HOST"),
+    "port":os.getenv("DB_PORT")
 }
 
 def get_db_connection():
@@ -21,36 +24,38 @@ def init_db():
         with conn.cursor() as cursor:
 
             cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users(
+                           id SERIAL PRIMARY KEY,
+                           user_name VARCHAR(50) NOT NULL,
+                           email VARCHAR(150) NOT NULL UNIQUE,
+                           password_hash VARCHAR(255) NOT NULL,
+                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+                ''')
+            
+            cursor.execute('''
                 CREATE TABLE IF NOT EXISTS wishlist(
                            id SERIAL PRIMARY KEY,
-                           product_id NOT NULL,
+                           user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                            product_name VARCHAR(500) NOT NULL,
                            image_url text,
                            target_price DECIMAL(10,2),
                            current_price DECIMAL(10,2),
                            url TEXT,
+                           UNIQUE(user_id, url),
                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
-
+                           
                 ''')
             
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS prie_history(
+                CREATE TABLE IF NOT EXISTS price_history(
                            id SERIAL PRIMARY KEY,
-                           product_id NOT NULL,
+                           product_id INTEGER NOT NULL,
                            product_name VARCHAR(500) NOT NULL,
                            price DECIMAL(10,2),
                            url text,
                            recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )            
                 ''')
-            
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS users(
-                           id SERIAL PRIMARY KEY,
-                           user_name VARCHAR(50) NOT NULL,
-                           email VARCHAR(150) NOT NULL,
-                           password_hash VARCHAR(255) NOT NULL,
-                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
-                ''')
+        
             conn.commit()
 
 

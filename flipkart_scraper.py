@@ -18,6 +18,7 @@ def scrape_flipkart(product_name):
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
 
+
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     try:
@@ -25,24 +26,25 @@ def scrape_flipkart(product_name):
         time.sleep(3)  # wait for page to load
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
+       
+
 
         products = soup.find_all('div', {'class': 'ZFwe0M'})
         print(f"Found {len(products)} products")
-        if products:
-            print(products[0].prettify())
+        
         data = []
-        for product in products:
-            parent=product.parent
-            image = parent.find('img', {'class': 'UCc11I'})
-            link = parent.find('a', {'class': 'k7wcnx'})
-            name = product.find('div', {'class': 'RG5Slk'})
-            price = product.find('div', {'class': 'hZ3P6w'})        # actual price ₹64,900
-            original_price = product.find('div', {'class': 'kRYCnD'})  # original price ₹69,900
-            discount = product.find('span', {'class': 'HQe8jr'})    # 7% off
-            rating = product.find('div', {'class': 'MKiFS6'})       # 4.6
-            image = product.find('img', {'class': 'UCc11I'})
-            link = product.find('a', href=True)
 
+        
+
+
+        for product in products:
+            parent_container = product.find_parent('div',attrs={'data-id':True})
+            image = parent_container.find('img', {'class': 'UCc1lI'}) if parent_container else None
+            link = parent_container.find('a', {'class': 'k7wcnx'}) if parent_container else None
+
+            name = product.find('div', {'class': 'RG5Slk'})
+            price = product.find('div', {'class': 'hZ3P6w'})
+            rating = product.find('div', {'class': 'MKiFS6'})
 
             if name and price:
                 data.append({
@@ -61,3 +63,6 @@ def scrape_flipkart(product_name):
     
     finally:
         driver.quit()  # always close the browser
+
+
+    

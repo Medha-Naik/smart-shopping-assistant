@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | PricePulse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">PricePulse</div>
+        <a href="/" class="back-btn">← Back</a>
+    </nav>
+
+    <div class="results-container">
+        <h2 class="results-heading">Search Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <script src="{{url_for('static',filename='result.js')}}"></script>
+</body>
+</html>

@@ -13,9 +13,12 @@
         <div class="logo">PricePulse</div>
         <ul class="nav-links">
             <li><a href="#">Home</a></li>
+            
             <li><a href="#">Wishlist</a></li>
-            <li><a href="#">Login</a></li>
-            <li><a href="#" class="btn">Sign Up</a></li>
+            {%if not current_user.is_authenticated%}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register" class="btn">Sign Up</a></li>
+            {%endif%}
         </ul>
     </nav>
 
@@ -80,16 +83,18 @@
     </footer>
 <script>
     document.querySelector('#search-btn').addEventListener('click',function(){
-        const query=document.querySelector('#search-input').value
+        const query=document.querySelector('#search-input').value.trim()
+
         if(!query)return
-        window.location.href=`/results.html?q=${query}`
+
+        window.location.href=`/result?q=${encodeURIComponent(query)}`
     })
 
-    document.querySelector('#search-input').addEventListener('keypress',function(e)
+    document.querySelector('#search-input').addEventListener('keypress',function(e){
+        if(e.key=='Enter')
     {
-        if(e.key==='Enter'){
-            document.querySelector('#search-btn').click()
-        }
+        document.querySelector('#search-btn').click()
+    }
     })
 </script>
 </body>
