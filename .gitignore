@@ -210,3 +210,4 @@ __marimo__/
 .env
 __pycache__/
 .pyc
+client_secret.json

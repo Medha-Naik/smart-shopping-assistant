@@ -56,3 +56,21 @@
     margin-bottom: 16px;
     font-size: 14px;
 }
+
+.google-btn{
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: #111;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 12px;
+    font-size: 15px;
+}
+
+.google-btn:hover {
+    background-origin: #f5f5f5;
+}

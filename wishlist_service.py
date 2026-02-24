@@ -38,3 +38,10 @@ def update_target_price(product_id,user_id,new_target_price):
                   result=cursor.fetchone()
                   conn.commit()
                   return result
+             
+def get_wishlist(user_id):
+     with get_db_connection() as conn:
+          with conn.cursor() as cursor:
+               cursor.execute('''
+                SELECT * FROM wishlist WHERE user_id=%s''',(user_id,))
+               return cursor.fetchall()

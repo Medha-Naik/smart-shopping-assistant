@@ -47,7 +47,12 @@ function displayResults(results){
                         ${product.rating !== "N/A" ? product.rating + " ★" : "No Rating"}
                         </div>
                         <div class="price">${product.price}</div>
-                        <button class="wishlist-btn" onclick="toggleWishlist(this)">
+                        <button class="wishlist-btn"
+                        data-name="${product.name}"
+                        data-price="${product.price}"
+                        data-image="${product.image}"
+                        data-url="${product.url}"
+                        onclick="toggleWishlist(this)">
                         <svg viewBox="0 0 24 24" width="24" height="24">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -62,4 +67,18 @@ function displayResults(results){
 }
 function toggleWishlist(btn){
     btn.classList.toggle('active')
+
+    fetch('/wishlist/add',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            name:btn.dataset.name,
+            price:btn.dataset.price,
+            image:btn.dataset.image,
+            url:btn.dataset.url
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>console.log(data))
+    .catch(err=>console.log(err))
 }

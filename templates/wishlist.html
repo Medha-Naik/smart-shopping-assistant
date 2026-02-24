@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | PricePulse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">PricePulse</div>
+        <a href="/" class="back-btn">← Back</a>
+    </nav>
+
+    <div class="results-container">
+        <h2 class="results-heading">My Wishlist</h2>
+
+        {% if items %}
+        <div id="results">
+            {% for item in items %}
+            <div class="product-item">
+                <img class="product-image" src="{{ item['image_url'] if item['image_url'] != 'N/A' else 'https://via.placeholder.com/200' }}">
+                <div class="product-details">
+                    <div class="product-title">{{ item['product_name'] }}</div>
+                    <div class="price">{{ item['current_price'] }}</div>
+                    {% if item['target_price'] %}
+                    <div style="font-size:13px; color:#388e3c;">Target: ₹{{ item['target_price'] }}</div>
+                    {% endif %}
+                    <div class="product-actions" style="margin-top:10px;">
+                        <a href="{{ item['url'] }}" target="_blank" style="font-size:13px; color:#2874f0;">View on Flipkart</a>
+                        <button data-id="({{ item['id'] }})"onclick=removeItem(this) style="background:white; border:1.5px solid #ddd; border-radius:8px; padding:6px 12px; cursor:pointer; color:#e74c3c;">Remove</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center; color:#6b7280; margin-top:50px;">Your wishlist is empty. <a href="/">Search for products</a></p>
+        {% endif %}
+    </div>
+
+    <script>
+        function removeItem(btn) {
+            const productId=btn.dataset.id
+            fetch('/wishlist/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success){
+                    btn.closest('.product-item').remove()
+                }
+            })
+            .catch(err => console.error(err))
+        }
+    </script>
+
+</body>
+</html>
