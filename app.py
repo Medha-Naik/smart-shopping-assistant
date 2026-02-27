@@ -209,10 +209,52 @@ def wishlist():
     items=get_wishlist(current_user.id)
     return render_template('wishlist.html',items=items)
 
+@app.route('/wishlist/items')
+@login_required
+def get_wishlist_urls():
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT url FROM wishlist WHERE user_id=%s',(current_user.id,))
+            items=cursor.fetchall()
+    return jsonify([item['url']for item in items])
+
 @app.route('/check-login')
 def check_login():
     return jsonify({'logged_in':current_user.is_authenticated})
 
 
+@app.route('/profile')
+@login_required
+def profile():
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT * FROM users WHERE id=%s',(current_user.id,))
+            user=cursor.fetchone()
+            cursor.execute('SELECT COUNT(*) as count FROM wishlist WHERE user_id=%s', (current_user.id,))
+            wishlist_count=cursor.fetchone()['count']
+    return render_template('profile.html',user=user,wishlist_count=wishlist_count)
+
+@app.route('/profile/change-password',methods=['POST'])
+@login_required
+def change_password():
+    current_password=request.form.get('current_password')
+    new_password= request.form.get('new_password')
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT * FROM users WHERE id=%s ',(current_user.id,))
+            user=cursor.fetchone()
+
+
+    import bcrypt 
+    if not bcrypt.checkpw(current_password.encode('utf-8'),user['password_hash'].encode('utf-8')):
+        return render_template('profile.html',user=user,wishlist_count=0,error='Current password is incorrect')
+    
+    new_hash=bcrypt.hashpw(new_password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('UPDATE users SET password_hash=%s WHERE id=%s', (new_hash,current_user.id))
+        conn.commit()
+    return redirect(url_for('profile',success='Password updated succesfully'))
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)

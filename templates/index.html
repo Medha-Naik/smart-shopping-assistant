@@ -20,9 +20,7 @@
             <li><a href="/register" class="btn">Sign Up</a></li>
             {%endif%}
             {%if current_user.is_authenticated%}
-            <li>
-                <a href="/logout">Logout</a>
-            </li>
+            <li><a href="/profile">Profile</a></li>
             {%endif%}
         </ul>
     </nav>
