@@ -1,44 +1,35 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 import time
+import re
 
 def scrape_flipkart(product_name):
     search_query = product_name.replace(' ', '+')
     url = f"https://www.flipkart.com/search?q={search_query}"
-
     print(f"Searching: {url}\n")
 
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')  # runs chrome in background, no window opens
+    options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     try:
         driver.get(url)
-        time.sleep(3)  # wait for page to load
+        time.sleep(3)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-       
-
-
         products = soup.find_all('div', {'class': 'ZFwe0M'})
         print(f"Found {len(products)} products")
-        
+
         data = []
 
-        
-
-
         for product in products:
-            parent_container = product.find_parent('div',attrs={'data-id':True})
+            parent_container = product.find_parent('div', attrs={'data-id': True})
             image = parent_container.find('img', {'class': 'UCc1lI'}) if parent_container else None
             link = parent_container.find('a', {'class': 'k7wcnx'}) if parent_container else None
 
@@ -60,9 +51,51 @@ def scrape_flipkart(product_name):
     except Exception as e:
         print(f"Error: {e}")
         return []
-    
+
     finally:
-        driver.quit()  # always close the browser
+        driver.quit()
 
 
+def scrape_price_by_url(url):
+    # Clean URL - remove tracking parameters
+    parsed = urlparse(url)
+    clean_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+    
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    try:
+        driver.get(url)
+        time.sleep(5)
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+
+        candidates=soup.find_all('div',class_=['v1zwn21k', 'v1zwn20', '_1psv1zeb9', '_1psv1ze0'])
+        for el in candidates:
+            text=el.text.strip()
+            if text.startswith('₹'):
+                price_str = re.sub(r'[₹,\s]', '', text)
+                return float(price_str)
+        
+        return None
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+    finally:
+        driver.quit()
+
+
+if __name__ == '__main__':
+    url = 'https://www.flipkart.com/dell-vostro-intel-core-i3-11th-gen-1115g4-8-gb-256-gb-ssd-windows-10-home-3400-thin-light-laptop/p/itm795b24ae3f63c?pid=COMGBUKJRGHNGGZE&lid=LSTCOMGBUKJRGHNGGZEIBZK1M&marketplace=FLIPKART&q=dell+vostro&store=6bo%2Fb5g&srno=s_1_2&otracker=search&otracker1=search&fm=organic&iid=19c57350-3687-4a5e-97b6-5aef5a4080c7.COMGBUKJRGHNGGZE.SEARCH&ppt=hp&ppn=homepage&ssid=vxwlhqsee80000001772109736605&qH=0a9894175694f560&ov_redirect=true'
+    price=scrape_price_by_url(url)
+    print(f"price:{price}")
     

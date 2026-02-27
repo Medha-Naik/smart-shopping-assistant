@@ -10,7 +10,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 import os
 from wishlist_service import add_to_wishlist,remove_from_wishlist,get_wishlist
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from price_checker import check_prices
 
 load_dotenv()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # dev only, remove in production
@@ -36,6 +37,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
+scheduler=BackgroundScheduler()
+scheduler.add_job(check_prices,'interval',hours=6,max_instances=2)
+scheduler.start()
 
 class User(UserMixin):
     def __init__(self, id, username, email):
@@ -204,6 +209,10 @@ def wishlist():
     items=get_wishlist(current_user.id)
     return render_template('wishlist.html',items=items)
 
+@app.route('/check-login')
+def check_login():
+    return jsonify({'logged_in':current_user.is_authenticated})
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)

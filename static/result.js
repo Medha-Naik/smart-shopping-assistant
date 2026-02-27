@@ -66,8 +66,17 @@ function displayResults(results){
     })
 }
 function toggleWishlist(btn){
-    btn.classList.toggle('active')
+    fetch('/check-login')
+    .then(res=>res.json())
+    .then(data=>{
+        if(!data.logged_in){
+        window.location.href='/login'
+        return
+        }
 
+
+    btn.classList.toggle('active')
+    const targetPrice=prompt('Enter target price (optional)')
     fetch('/wishlist/add',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
@@ -75,10 +84,12 @@ function toggleWishlist(btn){
             name:btn.dataset.name,
             price:btn.dataset.price,
             image:btn.dataset.image,
-            url:btn.dataset.url
+            url:btn.dataset.url,
+            target_price:targetPrice
         })
     })
     .then(res=>res.json())
     .then(data=>console.log(data))
     .catch(err=>console.log(err))
+})
 }

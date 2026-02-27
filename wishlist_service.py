@@ -7,6 +7,7 @@ def add_to_wishlist(user_id,product_name,current_price,image_url,url,target_pric
         with conn.cursor() as cursor:
             cursor.execute('''
                        INSERT INTO wishlist(user_id,product_name,current_price,image_url,url,target_price)values(%s,%s,%s,%s,%s,%s)
+                         ON CONFLICT (user_id,url) DO NOTHING
                            RETURNING *
                             ''',(user_id,product_name,current_price,image_url,url,target_price))
             

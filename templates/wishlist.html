@@ -30,7 +30,7 @@
                     {% endif %}
                     <div class="product-actions" style="margin-top:10px;">
                         <a href="{{ item['url'] }}" target="_blank" style="font-size:13px; color:#2874f0;">View on Flipkart</a>
-                        <button data-id="({{ item['id'] }})"onclick=removeItem(this) style="background:white; border:1.5px solid #ddd; border-radius:8px; padding:6px 12px; cursor:pointer; color:#e74c3c;">Remove</button>
+                        <button data-id="{{ item['id'] }}"onclick=removeItem(this) style="background:white; border:1.5px solid #ddd; border-radius:8px; padding:6px 12px; cursor:pointer; color:#e74c3c;">Remove</button>
                     </div>
                 </div>
             </div>
