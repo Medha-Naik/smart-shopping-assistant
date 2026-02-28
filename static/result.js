@@ -79,7 +79,8 @@ function toggleWishlist(btn){
         }
 
         btn.classList.toggle('active')
-        const targetPrice = prompt('Enter target price (optional)')
+        const targetPriceInput = prompt('Enter target price (optional)')
+        const targetPrice=targetPriceInput?targetPriceInput.trim():null
         fetch('/wishlist/add', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

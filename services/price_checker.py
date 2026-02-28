@@ -1,6 +1,6 @@
 from database import get_db_connection
-from email_service import send_alert
-from flipkart_scraper import scrape_price_by_url
+from services.email_service import send_alert
+from scrapers.flipkart_scraper import scrape_price_by_url
 
 def check_prices():
     print("Running price check")

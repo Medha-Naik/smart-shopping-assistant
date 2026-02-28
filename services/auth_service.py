@@ -3,9 +3,6 @@ from flask_login import LoginManager,UserMixin,login_user,logout_user,login_requ
 from database import get_db_connection
 
 
-
-
-
 def register_user(username,email,password):
     password_hash= bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
 
