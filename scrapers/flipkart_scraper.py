@@ -94,8 +94,4 @@ def scrape_price_by_url(url):
         driver.quit()
 
 
-if __name__ == '__main__':
-    url = 'https://www.flipkart.com/dell-vostro-intel-core-i3-11th-gen-1115g4-8-gb-256-gb-ssd-windows-10-home-3400-thin-light-laptop/p/itm795b24ae3f63c?pid=COMGBUKJRGHNGGZE&lid=LSTCOMGBUKJRGHNGGZEIBZK1M&marketplace=FLIPKART&q=dell+vostro&store=6bo%2Fb5g&srno=s_1_2&otracker=search&otracker1=search&fm=organic&iid=19c57350-3687-4a5e-97b6-5aef5a4080c7.COMGBUKJRGHNGGZE.SEARCH&ppt=hp&ppn=homepage&ssid=vxwlhqsee80000001772109736605&qH=0a9894175694f560&ov_redirect=true'
-    price=scrape_price_by_url(url)
-    print(f"price:{price}")
     

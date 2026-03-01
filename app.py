@@ -4,11 +4,13 @@ from flask_login import LoginManager, UserMixin, login_required, current_user
 from database import get_db_connection
 from dotenv import load_dotenv
 from scrapers.flipkart_scraper import scrape_flipkart
+from scrapers.girias_scraper import scrape_girias
 from services.price_checker import check_prices
 from routes.auth_routes import auth_bp
 from routes.wishlist_routes import wishlist_bp
 from routes.profile_routes import profile_bp
 from apscheduler.schedulers.background import BackgroundScheduler
+from concurrent.futures import ThreadPoolExecutor
 import os
 
 load_dotenv()
@@ -59,9 +61,20 @@ def search_product():
     query = request.args.get('q')
     if not query:
         return jsonify({'error': 'please provide a valid query'})
-    data = scrape_flipkart(query)
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        flipkart_future=executor.submit(scrape_flipkart,query)
+        girias_future=executor.submit(scrape_girias,query)
+
+        flipkart_results=flipkart_future.result()
+        girias_results=girias_future.result()
+
+    for r in flipkart_results:
+        r['source']='Flipkart'
+    
+    data=flipkart_results+girias_results
+
     if not data:
-        return jsonify({'error': 'no products found'})
+        return jsonify({'error':'No products found'})
     return jsonify(data)
 
 @app.route('/result')

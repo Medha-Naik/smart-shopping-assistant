@@ -1,57 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | PricePulse</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | PricePulse</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+  <style>
+    .profile-page{min-height:100vh;padding:96px 24px 60px;background:var(--bg)}
+    .profile-wrapper{max-width:520px;margin:0 auto}
+    .profile-header{margin-bottom:32px}
+    .profile-header h1{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400}
+    .profile-header p{color:var(--text-secondary);font-size:14px;font-weight:300;margin-top:4px}
+    .profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;margin-bottom:16px}
+    .profile-field{padding:14px 0;border-bottom:1px solid var(--border)}
+    .profile-field:last-child{border-bottom:none}
+    .profile-field-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}
+    .profile-field-value{font-size:15px;color:var(--text-primary)}
+    .stat-chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-dim);border:1px solid rgba(200,169,126,0.2);color:var(--accent);font-size:13px;padding:4px 12px;border-radius:99px}
+    .stat-chip svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .section-head{font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:20px}
+    .danger-btn{
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      width:100%;padding:12px;background:transparent;
+      color:#e57373;border:1px solid rgba(192,57,43,0.3);border-radius:var(--radius);
+      font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;
+      text-decoration:none;transition:background var(--transition),border-color var(--transition);margin-top:12px;
+    }
+    .danger-btn:hover{background:rgba(192,57,43,0.08);border-color:rgba(192,57,43,0.5)}
+    .danger-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    /* nav links for profile page */
+    .nav-links{display:flex;list-style:none;align-items:center;gap:2px}
+    .nav-links li a{text-decoration:none;color:var(--text-secondary);font-size:13px;padding:7px 11px;border-radius:var(--radius);display:inline-flex;align-items:center;gap:6px;transition:color var(--transition),background var(--transition)}
+    .nav-links li a:hover{color:var(--text-primary);background:var(--surface-2)}
+    .nav-links li a svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">PricePulse</div>
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/wishlist">Wishlist</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
-    </nav>
 
-    <div class="auth-container" style="max-width:500px; margin-top:60px;">
-        <h2>My Profile</h2>
+  <nav class="navbar">
+    <a href="/" class="logo">Price<span>Pulse</span></a>
+    <ul class="nav-links">
+      <li>
+        <a href="/">
+          <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="/wishlist">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Wishlist
+        </a>
+      </li>
+      <li>
+        <a href="/logout">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign out
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-        <div style="margin-bottom:20px;">
-            <p style="font-size:13px; color:#6b7280;">Username</p>
-            <p style="font-size:16px; font-weight:600;">{{ user['user_name'] }}</p>
+  <div class="profile-page">
+    <div class="profile-wrapper">
+
+      <div class="profile-header">
+        <h1>My Profile</h1>
+        <p>Manage your account details</p>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-field">
+          <div class="profile-field-label">Username</div>
+          <div class="profile-field-value">{{ user['user_name'] }}</div>
         </div>
-
-        <div style="margin-bottom:20px;">
-            <p style="font-size:13px; color:#6b7280;">Email</p>
-            <p style="font-size:16px; font-weight:600;">{{ user['email'] }}</p>
+        <div class="profile-field">
+          <div class="profile-field-label">Email</div>
+          <div class="profile-field-value">{{ user['email'] }}</div>
         </div>
-
-        <div style="margin-bottom:28px;">
-            <p style="font-size:13px; color:#6b7280;">Wishlist Items</p>
-            <p style="font-size:16px; font-weight:600;">{{ wishlist_count }} products tracked</p>
+        <div class="profile-field">
+          <div class="profile-field-label">Tracking</div>
+          <div class="profile-field-value">
+            <span class="stat-chip">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              {{ wishlist_count }} products tracked
+            </span>
+          </div>
         </div>
+      </div>
 
-        <hr style="margin-bottom:28px; border:none; border-top:1px solid #e5e7eb;">
-        {% if user['password_hash']!='google_oauth'%}
-
-        <h3 style="margin-bottom:16px; font-size:18px;">Change Password</h3>
-        {% if error %}
-            <p class="auth-error">{{ error }}</p>
-        {% endif %}
-        {% if success %}
-            <p style="background:#dcfce7; color:#16a34a; padding:10px; border-radius:6px; margin-bottom:16px; font-size:14px;">{{ success }}</p>
-        {% endif %}
+      {% if user['password_hash'] != 'google_oauth' %}
+      <div class="profile-card">
+        <div class="section-head">Change password</div>
+        {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
+        {% if success %}<div class="auth-success">{{ success }}</div>{% endif %}
         <form action="/profile/change-password" method="POST">
-            <input type="password" name="current_password" placeholder="Current Password" required>
-            <input type="password" name="new_password" placeholder="New Password" required>
-            <button type="submit">Update Password</button>
+          <input type="password" name="current_password" placeholder="Current password" required>
+          <input type="password" name="new_password" placeholder="New password" required>
+          <button type="submit">Update password</button>
         </form>
-        {%endif%}
-        <a href="/logout" class="google-btn" style="margin-top:16px; color:#e74c3c; border-color:#e74c3c;">Logout</a>
+      </div>
+      {% endif %}
+
+      <a href="/logout" class="danger-btn">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </a>
+
     </div>
+  </div>
 </body>
 </html>
