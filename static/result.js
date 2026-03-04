@@ -10,7 +10,8 @@ if (query) {
         document.querySelector('#results').innerHTML = `<p class="error">${data.error}</p>`;
       } else {
         allResults = data;
-        displayResults(allResults);
+        sortResults('asc');
+  
         fetch('/wishlist/items')
           .then(res => res.json())
           .then(wishlistedUrls => {
@@ -35,14 +36,13 @@ function parsePrice(item) {
 }
 
 function sortResults(order) {
-  // Update active button
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.sort-btn[data-sort="${order}"]`).classList.add('active');
+
 
   const sorted = [...allResults];
   if (order === 'asc') sorted.sort((a, b) => parsePrice(a) - parsePrice(b));
   else if (order === 'desc') sorted.sort((a, b) => parsePrice(b) - parsePrice(a));
-
+  else if (order === 'flipkart') sorted.sort((a, b) => (a.source === 'Flipkart' ? -1 : 1));
+  else if (order === 'girias') sorted.sort((a, b) => (a.source === 'Girias' ? -1 : 1));
   displayResults(sorted);
 
   // Re-highlight wishlisted items
