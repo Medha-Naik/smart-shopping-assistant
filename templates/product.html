@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product | PricePulse</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">Price<span>Pulse</span></a>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a href="/" class="icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      </a>
+      <a href="/wishlist" class="icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <div class="product-page">
+    <div class="product-layout">
+      <div class="product-image-box">
+        <img id="prod-image" src="" alt="Product Image">
+      </div>
+
+      <div class="product-info">
+        <span id="prod-source" class="source-badge"></span>
+        <div id="prod-name" class="product-name"></div>
+        <div id="prod-price" class="product-price"></div>
+        <div class="divider"></div>
+
+        <div class="action-buttons">
+          <a id="buy-btn" href="#" target="_blank" class="buy-btn">
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+
+          <button id="wishlist-btn" class="wishlist-action-btn" onclick="toggleWishlist()">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            Add to Wishlist
+          </button>
+
+          <div id="target-section" class="target-section">
+            <label>Set a target price and get alerted when it drops</label>
+            <div class="target-input-row">
+              <input type="number" id="target-input" placeholder="e.g. 50000">
+              <button onclick="saveTargetPrice()">Set</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const p = new URLSearchParams(window.location.search);
+    const product = {
+      name: p.get('name') || '',
+      price: p.get('price') || '',
+      image: p.get('image') || '',
+      url: p.get('url') || '',
+      source: p.get('source') || 'Flipkart'
+    };
+
+    document.getElementById('prod-name').textContent = product.name;
+    document.getElementById('prod-price').textContent = product.price;
+    document.getElementById('buy-btn').href = product.url;
+
+    const img = document.getElementById('prod-image');
+    img.src = product.image && product.image !== 'N/A' ? product.image : 'https://via.placeholder.com/300x300/111111/333333?text=No+Image';
+    img.alt = product.name;
+
+    const sourceBadge = document.getElementById('prod-source');
+    sourceBadge.textContent = product.source;
+    sourceBadge.classList.add(product.source.toLowerCase());
+
+    fetch('/wishlist/items')
+      .then(r => r.json())
+      .then(urls => {
+        if (urls.includes(product.url)) {
+          const btn = document.getElementById('wishlist-btn');
+          btn.classList.add('active');
+          btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Wishlisted`;
+          document.getElementById('target-section').classList.add('visible');
+        }
+      }).catch(() => {});
+
+    function toggleWishlist() {
+      fetch('/check-login')
+        .then(r => r.json())
+        .then(data => {
+          if (!data.logged_in) { window.location.href = '/login'; return; }
+          const btn = document.getElementById('wishlist-btn');
+          btn.classList.toggle('active');
+          const isActive = btn.classList.contains('active');
+          btn.innerHTML = isActive
+            ? `<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Wishlisted`
+            : `<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Add to Wishlist`;
+
+          document.getElementById('target-section').classList.toggle('visible', isActive);
+
+          if (isActive) {
+            fetch('/wishlist/add', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                url: product.url,
+                target_price: null
+              })
+            }).catch(console.error);
+          }
+        });
+    }
+
+    function saveTargetPrice() {
+      const target = document.getElementById('target-input').value.trim();
+      if (!target) return;
+      fetch('/wishlist/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          url: product.url,
+          target_price: target
+        })
+      }).then(r => r.json()).then(() => {
+        document.getElementById('target-input').placeholder = `Target set: ₹${target}`;
+        document.getElementById('target-input').value = '';
+      }).catch(console.error);
+    }
+  </script>
+</body>
+</html>

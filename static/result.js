@@ -70,7 +70,7 @@ function displayResults(results) {
     const sourceColor = source === 'Girias' ? '#c8a97e' : '#6fb3ff';
 
     container.innerHTML += `
-      <div class="product-item">
+      <div class="product-item" style="cursor:pointer;" onclick="window.location.href='/product?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&image=${encodeURIComponent(product.image)}&url=${encodeURIComponent(product.url)}&source=${encodeURIComponent(product.source)}'">
         <div class="product-image-wrap">
           <img class="product-image" src="${imgSrc}" alt="${product.name}" loading="lazy">
         </div>

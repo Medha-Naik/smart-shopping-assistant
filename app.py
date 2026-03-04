@@ -81,6 +81,10 @@ def search_product():
 def result():
     return render_template('result.html')
 
+@app.route('/product')
+def product():
+    return render_template('product.html')
+
 @app.route('/check-login')
 def check_login():
     return jsonify({'logged_in': current_user.is_authenticated})
