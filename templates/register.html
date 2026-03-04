@@ -24,13 +24,18 @@
 
       {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
 
-      <form action="/register" method="POST">
+      <form id="register-form" action="/register" method="POST">
         <input type="text" name="username" placeholder="Username" required autocomplete="username">
         <input type="email" name="email" placeholder="Email address" required autocomplete="email">
         <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
-        <button type="submit">Create account</button>
-      </form>
+        <button type="button" onclick="sendOtp()">Create Account</button>
+        <div id="otp-section" style="display: none;">
+          <input type="text" id="otp-input" placeholder="Enter 6 digit OTP" maxlength="6">
+          <button type="button" onclick="verifyOtp()">Verify OTP</button>
+        </div>
 
+      </form>
+      
       <div class="auth-divider">or</div>
 
       <a href="{{ url_for('auth.google_login') }}" class="google-btn">
@@ -42,4 +47,39 @@
     </div>
   </div>
 </body>
+<script>
+  function sendOtp(){
+    const email=document.querySelector('input[name="email"]').value;
+    fetch('/send-otp',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.success){
+        document.getElementById('otp-section').style.display='block';
+      }
+    });
+  }
+
+  function verifyOtp(){
+    const otp=document.getElementById('otp-input').value;
+    fetch('/verify-otp',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({otp})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.success){
+        document.getElementById('register-form').submit();
+
+      }else{
+        alert(data.error);
+        
+      }
+    })
+  }
+</script>
 </html>

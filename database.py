@@ -46,15 +46,6 @@ def init_db():
                            
                 ''')
             
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS price_history(
-                           id SERIAL PRIMARY KEY,
-                           product_id INTEGER NOT NULL,
-                           product_name VARCHAR(500) NOT NULL,
-                           price DECIMAL(10,2),
-                           url text,
-                           recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )            
-                ''')
         
             conn.commit()
 

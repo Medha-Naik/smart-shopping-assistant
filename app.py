@@ -9,6 +9,7 @@ from services.price_checker import check_prices
 from routes.auth_routes import auth_bp
 from routes.wishlist_routes import wishlist_bp
 from routes.profile_routes import profile_bp
+from routes.otp_routes import otp_bp
 from apscheduler.schedulers.background import BackgroundScheduler
 from concurrent.futures import ThreadPoolExecutor
 import os
@@ -51,6 +52,7 @@ def load_user(user_id):
 app.register_blueprint(auth_bp)
 app.register_blueprint(wishlist_bp)
 app.register_blueprint(profile_bp)
+app.register_blueprint(otp_bp)
 
 @app.route('/')
 def home():
