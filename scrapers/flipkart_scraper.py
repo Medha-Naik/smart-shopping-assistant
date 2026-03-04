@@ -56,7 +56,7 @@ def scrape_flipkart(product_name):
         driver.quit()
 
 
-def scrape_price_by_url(url):
+def flipkart_price(url):
     # Clean URL - remove tracking parameters
     parsed = urlparse(url)
     clean_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"

@@ -1,6 +1,8 @@
 from database import get_db_connection
 from services.email_service import send_alert
-from scrapers.flipkart_scraper import scrape_price_by_url
+from scrapers.flipkart_scraper import flipkart_price
+from scrapers.girias_scraper import girias_price
+
 
 def check_prices():
     print("Running price check")
@@ -15,18 +17,22 @@ def check_prices():
             items=cursor.fetchall()
 
     for item in items:
-        print(f"checking:item['product_name']")
-        print(f"URL:{item['url']}")
-        current_price=scrape_price_by_url(item['url'])
-        print(f"scraped price:{current_price}")
-        print(f"target_price:{item['target_price']}")
+        
+        if 'giriasindia.com' in item['url']:
+            current_price=girias_price(item['url'])
+        else:
+            current_price=flipkart_price(item['url'])
 
+        
         if not current_price:
             continue
 
-        print(f"Clean price: {current_price}")
-        print(f"Condition: {current_price} <= {float(item['target_price'])}")
-
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute('''
+                    UPDATE wishlist SET current_price=%s WHERE id=%s''',(current_price,item['id']))
+                conn.commit()
+  
         if current_price<=float(item['target_price']):
             send_alert(
                 to_email=item['email'],

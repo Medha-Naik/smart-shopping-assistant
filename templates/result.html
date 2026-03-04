@@ -6,29 +6,85 @@
   <title>Search Results | PricePulse</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
   <style>
+    /* ── Loader ── */
+    .loader-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+
+    /* ── Navbar search ── */
+    .navbar-search {
+      display: flex;
+      align-items: center;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color var(--transition);
+      flex: 1;
+      max-width: 380px;
+      margin: 0 20px;
+    }
+    .navbar-search:focus-within { border-color: var(--border-hover); }
+    .navbar-search input {
+      flex: 1;
+      padding: 8px 14px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+    .navbar-search input::placeholder { color: var(--text-muted); }
+    .navbar-search button {
+      padding: 8px 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      display: flex; align-items: center;
+      transition: color var(--transition);
+    }
+    .navbar-search button:hover { color: var(--accent); }
+    .navbar-search button svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── Toolbar ── */
     .toolbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-    .sort-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+      gap: 8px;
     }
     .sort-label {
       font-size: 12px;
       color: var(--text-muted);
-      margin-right: 4px;
-      letter-spacing: 0.04em;
+      margin-right: 2px;
     }
     .sort-btn {
       display: inline-flex;
       align-items: center;
       gap: 5px;
       padding: 6px 14px;
-      background: transparent;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 99px;
       color: var(--text-secondary);
@@ -40,53 +96,63 @@
     .sort-btn svg {
       width: 11px; height: 11px;
       stroke: currentColor; fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
     }
     .sort-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
-    .sort-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--bg);
-      font-weight: 500;
-    }
+    .sort-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 500; }
   </style>
 </head>
 <body>
   <nav class="navbar">
     <a href="/" class="logo">Price<span>Pulse</span></a>
+
+    <div class="navbar-search">
+      <input type="text" id="nav-search-input" placeholder="Search products…" autocomplete="off">
+      <button id="nav-search-btn">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+
     <div style="display:flex;gap:8px;align-items:center;">
       <a href="/wishlist" class="icon-btn">
         <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         Wishlist
-      </a>
-      <a href="/" class="icon-btn">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        Back
       </a>
     </div>
   </nav>
 
   <div class="results-container">
     <div class="toolbar">
-      <div></div>
-      <div class="sort-group">
-        <span class="sort-label">Sort by price</span>
-        <button class="sort-btn active" data-sort="asc" onclick="sortResults('asc')">
-          <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-          Low to high
-        </button>
-        <button class="sort-btn" data-sort="desc" onclick="sortResults('desc')">
-          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-          High to low
-        </button>
-      </div>
+      <span class="sort-label">Sort by price</span>
+      <button class="sort-btn active" data-sort="asc" onclick="sortResults('asc')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        Low to high
+      </button>
+      <button class="sort-btn" data-sort="desc" onclick="sortResults('desc')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        High to low
+      </button>
     </div>
 
     <div id="results">
-      <div class="loading-state">Searching across all stores…</div>
+      <div class="loader-wrap">
+        <div class="spinner"></div>
+      </div>
     </div>
   </div>
 
+  <script>
+    // Pre-fill navbar search with current query
+    document.getElementById('nav-search-input').value=new URLSearchParams(window.location.search).get('q')||'';
+
+    document.getElementById('nav-search-btn').addEventListener('click', () => {
+      const val = document.getElementById('nav-search-input').value.trim();
+      if (val) window.location.href = `/result?q=${encodeURIComponent(val)}`;
+    });
+    document.getElementById('nav-search-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') document.getElementById('nav-search-btn').click();
+    });
+  </script>
   <script src="{{ url_for('static', filename='result.js') }}"></script>
 </body>
 </html>
