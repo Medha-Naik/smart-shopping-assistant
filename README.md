@@ -14,6 +14,15 @@ Shopping assistant for electronics that aggregates prices from various platforms
 - 🔐 OTP verified registration
 - 🔑 Google OAuth login
 
+## Screenshots
+
+![Home Page](screenshots/home_page.png)
+![Results Page](screenshots/result_page.png)
+![Sorting](screenshots/sorting.png)
+![Wishlist](screenshots/wishlist_page.png)
+```
+
+
 ## Tech Stack
 
 - **Backend** — Flask, PostgreSQL, APScheduler
@@ -57,6 +66,7 @@ Shopping assistant for electronics that aggregates prices from various platforms
 ```
    python app.py
 ```
+
 
 ## Project Structure
 ```
