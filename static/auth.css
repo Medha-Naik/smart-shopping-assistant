@@ -162,3 +162,23 @@
   margin-bottom: 16px;
   font-size: 13px;
 }
+
+.auth-container button[type="button"] {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  background: var(--text-primary);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.auth-container button[type="button"]:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}

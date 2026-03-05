@@ -7,9 +7,10 @@ otp_bp=Blueprint('otp',__name__)
 
 @otp_bp.route('/send-otp',methods=['POST'])
 def send_otp():
-    data=request.json()
+    data=request.json
     email=data.get('email')
     otp=str(random.randint(100000,999999))
+    print(otp)
     session['otp']=otp
     session['otp_email']=email
     session['otp_expiry']=time.time()+600
@@ -17,7 +18,7 @@ def send_otp():
     return jsonify({'success':True})
 
 @otp_bp.route('/verify-otp',methods=['POST'])
-def verify_otp(otp):
+def verify_otp():
     data=request.json
     otp=data.get('otp')
 
