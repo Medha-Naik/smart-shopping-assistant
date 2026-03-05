@@ -1,6 +1,6 @@
 # PricePulse 
 
-Shopping assistant for electronics that aggregates prices from various platforms, allows users to compare products, save to wishlist, set target price notifications, and monitor price trends over time.
+Shopping assistant for electronics that aggregates prices from various platforms, allows users to compare products, save to wishlist, set target price notifications.
 
 
 
