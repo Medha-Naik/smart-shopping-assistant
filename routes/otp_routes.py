@@ -1,5 +1,7 @@
 from flask import Blueprint,request,jsonify,session
 from services.email_service import send_otp_email
+from database import get_db_connection
+import bcrypt
 import random
 import time
 
@@ -31,3 +33,17 @@ def verify_otp():
         return jsonify({'success':True})
     else:
         return jsonify({'success':False,'error':'Invalid OTP'})
+
+@otp_bp.route('/reset-password',methods=['POST'])
+def reset_password():
+    data=request.json
+    email=data.get('email')
+    password=data.get('password')
+
+    new_hash=bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('UPDATe users SET password_hash=%s WHERE email=%s',(new_hash,email))
+        conn.commit()
+    return jsonify({'success':True})

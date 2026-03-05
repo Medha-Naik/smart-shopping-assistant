@@ -29,7 +29,9 @@
         <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
         <button type="submit">Sign in</button>
       </form>
-
+      <div style="text-align:right;margin-top:6px;">
+        <a href="/forgot-password" style="font-size:13px;color:var(--accent);text-decoration:none;">Forgot password?</a>
+      </div>
       <div class="auth-divider">or</div>
 
       <a href="{{ url_for('auth.google_login') }}" class="google-btn">

@@ -80,13 +80,13 @@
       <div class="step"><div class="step-num">3</div><p>Get notified when price drops</p></div>
     </div>
   </section>
-
+  {% if not current_user.is_authenticated %}
   <section class="cta">
     <h2>Start saving today</h2>
     <p>Free forever. No credit card required.</p>
     <a href="/register" class="cta-btn">Create free account</a>
   </section>
-
+  {%endif%}
   <footer><p>© 2026 PricePulse. All rights reserved.</p></footer>
 
   <script>

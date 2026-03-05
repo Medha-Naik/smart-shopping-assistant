@@ -47,39 +47,6 @@
     </div>
   </div>
 </body>
-<script>
-  function sendOtp(){
-    const email=document.querySelector('input[name="email"]').value;
-    fetch('/send-otp',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email})
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.success){
-        document.getElementById('otp-section').style.display='block';
-      }
-    });
-  }
 
-  function verifyOtp(){
-    const otp=document.getElementById('otp-input').value;
-    fetch('/verify-otp',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({otp})
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.success){
-        document.getElementById('register-form').submit();
-
-      }else{
-        alert(data.error);
-        
-      }
-    })
-  }
-</script>
+ <script src="{{ url_for('static', filename='auth.js') }}"></script>
 </html>

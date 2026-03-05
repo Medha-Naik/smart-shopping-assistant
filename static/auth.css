@@ -182,3 +182,44 @@
   background: var(--accent);
   transform: translateY(-1px);
 }
+.profile-card input {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+}
+.profile-card input {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+.profile-card input:focus {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 3px rgba(200,169,126,0.06);
+}
+
+.profile-card button[type="submit"] {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  background: var(--text-primary);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.profile-card button[type="submit"]:hover {
+  background: var(--accent);
+}
