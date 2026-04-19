@@ -37,6 +37,7 @@ def send_alert(to_email,product_name,current_price,target_price,url):
         print(f"email error:{e}")
 
 def send_otp_email(to_email,otp):
+    print(f"GMAIL: {GMAIL}, PASSWORD exists: {GMAIL_PASSWORD is not None}")
     try:
         msg=MIMEMultipart()
         msg['From']=GMAIL
