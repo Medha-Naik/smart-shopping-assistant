@@ -211,3 +211,6 @@ __marimo__/
 __pycache__/
 .pyc
 client_secret.json
+.vscode/
+
+.env_

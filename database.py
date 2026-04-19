@@ -6,16 +6,10 @@ import os
 load_dotenv()
 
 
-DB_CONFIG={
-    "dbname":os.getenv("DB_NAME"),
-    "user":os.getenv("DB_USER"),
-    "password":os.getenv("DB_PASSWORD"),
-    "host":os.getenv("DB_HOST"),
-    "port":os.getenv("DB_PORT")
-}
+DATABASE_URL=os.getenv("DATABASE_URL")
 
 def get_db_connection():
-    conn=psycopg2.connect(**DB_CONFIG,cursor_factory=RealDictCursor)
+    conn=psycopg2.connect(DATABASE_URL,cursor_factory=RealDictCursor)
     return conn
 
 
